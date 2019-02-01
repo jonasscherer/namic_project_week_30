@@ -1,0 +1,51 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: gatekeeper
+  namespace: kube-system
+  labels:
+    k8s-app: gatekeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: gatekeeper
+  template:
+    metadata:
+      labels:
+        k8s-app: gatekeeper
+        name: gatekeeper
+    spec:
+      containers:
+      - image: keycloak/keycloak-gatekeeper:4.6.0.Final 
+        args: ["--config", "/opt/gatekeeper.json"]
+        name: gatekeeper
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: kproxy-http
+          containerPort: 8080
+        - name: kproxy-https
+          containerPort: 8443
+        volumeMounts:
+          - name: gatekeeper-config-file
+            mountPath: /opt/gatekeeper.json
+            subPath: gatekeeper.json
+          - name: tls-config
+            mountPath: "/opt/ssl"
+            readOnly: true
+        # livenessProbe:
+        #   tcpSocket:
+        #     port: kproxy-https
+        #   initialDelaySeconds: 15
+        #   periodSeconds: 120
+      volumes:
+      - name: gatekeeper-config-file
+        configMap:
+          name: gatekeeper-config
+          items:
+          - key: gatekeeper.json
+            path: gatekeeper.json
+      - name: tls-config
+        secret:
+          secretName: tls-secret

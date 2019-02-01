@@ -1,0 +1,21 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gatekeeper-service
+  namespace: kube-system
+spec:
+  selector:
+    k8s-app: gatekeeper
+  ports:
+    - protocol: TCP
+      port: 80
+      nodePort: 30080
+      targetPort: kproxy-http
+      name: http
+    - protocol: TCP
+      port: 443
+      nodePort: 30005
+      targetPort: kproxy-https
+      name: https
+  type: NodePort
+---

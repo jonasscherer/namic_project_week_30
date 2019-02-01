@@ -1,0 +1,51 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: keycloak-proxy
+  namespace: kube-system
+  labels:
+    k8s-app: keycloak-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: keycloak-proxy
+  template:
+    metadata:
+      labels:
+        k8s-app: keycloak-proxy
+        name: keycloak-proxy
+    spec:
+      containers:
+      # - image: jboss/keycloak-proxy:4.2.1.Final
+      - image: jboss/keycloak-proxy:4.3.0.Final 
+        name: keycloak-proxy
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: kproxy-http
+          containerPort: 8080
+        - name: kproxy-https
+          containerPort: 8443
+        volumeMounts:
+          - name: keycloak-proxy-config-file
+            mountPath: /opt/jboss/conf/proxy.json
+            subPath: proxy.json
+          - name: ssl-config-files
+            mountPath: /ssl
+            readOnly: true
+        # livenessProbe:
+        #   tcpSocket:
+        #     port: kproxy-https
+        #   initialDelaySeconds: 15
+        #   periodSeconds: 120
+      volumes:
+      - name: keycloak-proxy-config-file
+        configMap:
+          name: keycloak-proxy-config
+          items:
+          - key: proxy.json
+            path: proxy.json
+      - name: ssl-config-files
+        configMap:
+          name: jks-certificate

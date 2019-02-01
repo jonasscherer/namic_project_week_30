@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+data:
+  gatekeeper.json: |-
+        client-secret: 217ae38f-0b31-4334-bb0f-0071e6da7a26 # require for access_type: confidential
+        # Note the redirection-url is optional, it will default to the X-Forwarded-Proto / X-Forwarded-Host r the URL scheme and host not found
+        # discovery-url: http://keycloak-service.kube-system.svc.cluster.local:8080/auth/realms/namic
+        discovery-url: http://192.168.99.100:30001/auth/realms/namic
+        client-id: namic
+        listen: 0.0.0.0:8443
+        listen-http: 0.0.0.0:8080
+        enable-https-redirection: true
+        # enable-refresh-tokens: true
+        enable-security-filter: true
+        # enable-metrics: true
+        # enable-encrypted-token: false
+        # encryption-key: A35EEB8E96F62E562F9966AD68D5B2FC
+        enabled-proxy-protocol: true
+        enable-authorization-header: false
+        tls-cert: /opt/ssl/tls.crt
+        tls-private-key: /opt/ssl/tls.key
+        no-redirects: false
+        enable-default-deny: false
+        skip-upstream-tls-verify: true
+        upstream-url: http://traefik-ingress-service:80
+        resources:
+        - uri: /traefik
+          roles:
+          - admin
+        - uri: /auth
+          white-listed: true
+        - uri: /auth/*
+          white-listed: true
+        - uri: /*
+          roles:
+          - user
+kind: ConfigMap
+metadata:
+  name: gatekeeper-config
+  namespace: kube-system
