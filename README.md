@@ -19,7 +19,7 @@ It contains some basic Kubernetes yaml files, which can be used to deploy:
 -> all pods should be in the "running" state.
 This could take some time - don't worry if something is crashing - it will be restarted automatically..
 
-4) Go to https://192.168.99.100:30443/
+4) Go to https://192.168.99.102:30443/
 You should see the the login-page. 
 The default credentials are:
 - For the normal login:
@@ -31,19 +31,19 @@ username: **admin**
 password: **admin**
 
 You can change all passwords with the Keycloak management:
-https://192.168.99.100:30443/auth
+https://192.168.99.102:30443/auth
 
 ### How to use?
 
 The components have the the following urls:
-1) OHIF: https://192.168.99.100:30443/ (root)
-2) DCM4CHe https://192.168.99.100:30443/dcm4chee-arc/ui2
-3) Keycloak: https://192.168.99.100:30033/auth/
-4) Dicom receiver port is ```192.168.99.100:31112```
+1) OHIF: https://192.168.99.102:30443/ (root)
+2) DCM4CHe https://192.168.99.102:30443/dcm4chee-arc/ui2
+3) Keycloak: https://192.168.99.102:30033/auth/
+4) Dicom receiver port is ```192.168.99.102:31112```
 5) All data is stored inside the minikube vm (**/data_deployment**)
 
 To push an example image to DCM4CHE with the **dcm4che-tools docker container**:
-```sudo docker run --rm --network=host dcm4che/dcm4che-tools:5.15.1 storescu -cDCM4CHEE@192.168.99.100:31112 /opt/dcm4che/etc/testdata/dicom ```
+```sudo docker run --rm --network=host dcm4che/dcm4che-tools:5.15.1 storescu -cDCM4CHEE@192.168.99.102:31112 /opt/dcm4che/etc/testdata/dicom ```
 
 
 ### Further steps
