@@ -1,0 +1,196 @@
+---
+apiVersion: v1
+data:
+  traefik.toml: |
+    # DEPRECATED - for general usage instruction see [lifeCycle.graceTimeOut].
+    #
+    # If both the deprecated option and the new one are given, the deprecated one
+    # takes precedence.
+    # A value of zero is equivalent to omitting the parameter, causing
+    # [lifeCycle.graceTimeOut] to be effective. Pass zero to the new option in
+    # order to disable the grace period.
+    #
+    # Optional
+    # Default: "0s"
+    #
+    # graceTimeOut = "10s"
+
+    # Enable debug mode.
+    # This will install HTTP handlers to expose Go expvars under /debug/vars and
+    # pprof profiling data under /debug/pprof/.
+    # The log level will be set to DEBUG unless `logLevel` is specified.
+    #
+    # Optional
+    # Default: false
+    #
+    # debug = true
+    logLevel = "WARN"
+
+
+    # Periodically check if a new version has been released.
+    #
+    # Optional
+    # Default: true
+    #
+    # checkNewVersion = false
+
+    # Providers throttle duration.
+    #
+    # Optional
+    # Default: "2s"
+    #
+    # providersThrottleDuration = "2s"
+
+    # Controls the maximum idle (keep-alive) connections to keep per-host.
+    #
+    # Optional
+    # Default: 200
+    #
+    # maxIdleConnsPerHost = 200
+
+    # If set to true invalid SSL certificates are accepted for backends.
+    # This disables detection of man-in-the-middle attacks so should only be used on secure backend networks.
+    #
+    # Optional
+    # Default: false
+    #
+    insecureSkipVerify = true
+
+    # Register Certificates in the rootCA.
+    #
+    # Optional
+    # Default: []
+    #
+    # rootCAs = [ "/mycert.cert" ]
+
+    # Entrypoints to be used by frontends that do not specify any entrypoint.
+    # Each frontend can specify its own entrypoints.
+    #
+    # Optional
+    # Default: ["http"]
+    #
+    defaultEntryPoints = ["http"]
+
+    # Allow the use of 0 as server weight.
+    # - false: a weight 0 means internally a weight of 1.
+    # - true: a weight 0 means internally a weight of 0 (a server with a weight of 0 is removed from the available servers).
+    #
+    # Optional
+    # Default: false
+    #
+    # AllowMinWeightZero = true
+
+
+    # [traefikLog]
+    #   filePath = "/log/traefik.log"
+    #   format   = "json"
+
+    # [accessLog]
+    #   filePath = "/log/access.log"
+    #   format = "json"
+
+    #   [accessLog.filters]
+    #     statusCodes = ["200", "300-302"]
+    #     retryAttempts = true
+
+    #   [accessLog.fields]
+    #     defaultMode = "keep"
+    #     [accessLog.fields.names]
+    #       "ClientUsername" = "drop"
+    #       # ...
+
+    #     [accessLog.fields.headers]
+    #       defaultMode = "keep"
+    #       [accessLog.fields.headers.names]
+    #         "User-Agent" = "redact"
+    #         "Authorization" = "drop"
+    #         "Content-Type" = "keep"
+
+    [entryPoints]
+      [entryPoints.http]
+      address = ":80"
+        # [entryPoints.http.redirect]
+        #   regex = "^http://(.*)"
+        #   replacement = "https://$1"
+      [entryPoints.https]
+      address = ":443"
+
+
+    ################################################################
+    # Kubernetes Ingress Provider
+    ################################################################
+
+    # Enable Kubernetes Ingress Provider.
+    [kubernetes]
+
+    # Kubernetes server endpoint.
+    #
+    # Optional for in-cluster configuration, required otherwise.
+    # Default: empty
+    #
+    endpoint = "https://192.168.99.100:30005"
+
+    # Bearer token used for the Kubernetes client configuration.
+    #
+    # Optional
+    # Default: empty
+    #
+    # token = "my token"
+
+    # Path to the certificate authority file.
+    # Used for the Kubernetes client configuration.
+    #
+    # Optional
+    # Default: empty
+    #
+    # certAuthFilePath = "/my/ca.crt"
+
+    # Array of namespaces to watch.
+    #
+    # Optional
+    # Default: all namespaces (empty array).
+    #
+    namespaces = ["default","kube-system"]
+
+    # Ingress label selector to filter Ingress objects that should be processed.
+    #
+    # Optional
+    # Default: empty (process all Ingresses)
+    #
+    # labelselector = "A and not B"
+
+    # Value of `kubernetes.io/ingress.class` annotation that identifies Ingress objects to be processed.
+    # If the parameter is non-empty, only Ingresses containing an annotation with the same value are processed.
+    # Otherwise, Ingresses missing the annotation, having an empty value, or the value `traefik` are processed.
+    #
+    # Note : `ingressClass` option must begin with the "traefik" prefix.
+    #
+    # Optional
+    # Default: empty
+    #
+    # ingressClass = "traefik-internal"
+
+    # Disable PassHost Headers.
+    #
+    # Optional
+    # Default: false
+    #
+    disablePassHostHeaders = true
+
+    # Enable PassTLSCert Headers.
+    #
+    # Optional
+    # Default: false
+    #
+    # enablePassTLSCert = true
+
+    # Override default configuration template.
+    #
+    # Optional
+    # Default: <built-in template>
+    #
+    # filename = "kubernetes.tmpl"
+kind: ConfigMap
+metadata:
+  name: traefik-config
+  namespace: kube-system

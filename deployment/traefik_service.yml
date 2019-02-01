@@ -1,0 +1,66 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: traefik-ingress-service
+  namespace: kube-system
+spec:
+  selector:
+    k8s-app: traefik-ingress-lb
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: traefik-admin
+      name: tr-admin-port
+    - protocol: TCP
+      port: 80
+      nodePort: 30001
+      targetPort: traefik-http
+      name: traefik-http-port
+    - protocol: TCP
+      port: 443
+      targetPort: traefik-http
+      name: traefik-https-port
+  type: NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: traefik-web-api-ip
+  namespace: kube-system
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    kubernetes.io/ingress.global-static-ip-name: "kubernetes-ingress"
+spec:
+  rules:
+  - host:
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: traefik-ingress-service
+          servicePort: tr-admin-port
+      - path: /health
+        backend:
+          serviceName: traefik-ingress-service
+          servicePort: tr-admin-port
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: traefik-web-ip
+  namespace: kube-system
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    kubernetes.io/ingress.global-static-ip-name: "kubernetes-ingress"
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - host: 
+    http:
+      paths:
+      - path: /traefik
+        backend:
+          serviceName: traefik-ingress-service
+          servicePort: tr-admin-port
+---
+
