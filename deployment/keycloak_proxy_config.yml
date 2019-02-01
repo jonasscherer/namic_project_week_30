@@ -16,7 +16,7 @@ data:
               "base-path":"/",
               "adapter-config":{
                 "realm": "namic",
-                "auth-server-url": "https://192.168.99.100:30033/auth",
+                "auth-server-url": "https://192.168.99.102:30033/auth",
                 "ssl-required": "none",
                 "resource": "namic",
                 "token-minimum-time-to-live": 0,

@@ -17,7 +17,7 @@ data:
     <!doctype html>
     <html lang="en">
       <head>
-        <base href="https://192.168.99.100:30443/" target="index.html">
+        <base href="https://192.168.99.102:30443/" target="index.html">
         <meta charset="utf-8">
 
         <meta name="description" content="Open Health Imaging Foundation DICOM Viewer">
@@ -75,13 +75,13 @@ data:
         <!-- Load our React component. -->
         <script>
           var props = {
-            "routerBasename": "https://192.168.99.100:30443",
+            "routerBasename": "https://192.168.99.102:30443",
             "servers": {
               "dicomWeb": [{
                         "name": "DCM4CHEE",
-                        "wadoUriRoot": "https://192.168.99.100:30443/dcm4chee-arc/aets/DCM4CHEE/wado",
-                        "qidoRoot": "https://192.168.99.100:30443/dcm4chee-arc/aets/DCM4CHEE/rs",
-                        "wadoRoot": "https://192.168.99.100:30443/dcm4chee-arc/aets/DCM4CHEE/rs",
+                        "wadoUriRoot": "https://192.168.99.102:30443/dcm4chee-arc/aets/DCM4CHEE/wado",
+                        "qidoRoot": "https://192.168.99.102:30443/dcm4chee-arc/aets/DCM4CHEE/rs",
+                        "wadoRoot": "https://192.168.99.102:30443/dcm4chee-arc/aets/DCM4CHEE/rs",
                         "qidoSupportsIncludeField": true,
                         "imageRendering": "wadors",
                         "thumbnailRendering": "wadors",
@@ -92,9 +92,9 @@ data:
                     ]
               },
               "oidc": [{
-                  "authServerUrl": "https://192.168.99.100:30033/auth/realms/namic",
-                  "authRedirectUri": "https://192.168.99.100:30443/callback",
-                  "postLogoutRedirectUri": "https://192.168.99.100:30443/logout-redirect.html",
+                  "authServerUrl": "https://192.168.99.102:30033/auth/realms/namic",
+                  "authRedirectUri": "https://192.168.99.102:30443/callback",
+                  "postLogoutRedirectUri": "https://192.168.99.102:30443/logout-redirect.html",
                   "clientId": "namic",
                   "responseType": "id_token token",
                   "scope": "email profile openid",

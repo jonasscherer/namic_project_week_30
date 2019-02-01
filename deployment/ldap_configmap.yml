@@ -5,13 +5,13 @@ data:
     dn: dicomDeviceName=dcm4chee-arc,cn=Devices,cn=DICOM Configuration,dc=dcm4che,dc=org
     changetype: modify
     add: dcmInvokeImageDisplayPatientURL
-    dcmInvokeImageDisplayPatientURL: https://192.168.99.100:30001/ohif/IHEInvokeImageDisplay?requestType=PATIENT&patientID={}
+    dcmInvokeImageDisplayPatientURL: https://192.168.99.102:30001/ohif/IHEInvokeImageDisplay?requestType=PATIENT&patientID={}
     -
     
     dn: dicomDeviceName=dcm4chee-arc,cn=Devices,cn=DICOM Configuration,dc=dcm4che,dc=org
     changetype: modify
     add: dcmInvokeImageDisplayStudyURL
-    dcmInvokeImageDisplayStudyURL: https://192.168.99.100:30001/ohif/IHEInvokeImageDisplay?requestType=STUDY&studyUID={}
+    dcmInvokeImageDisplayStudyURL: https://192.168.99.102:30001/ohif/IHEInvokeImageDisplay?requestType=STUDY&studyUID={}
 kind: ConfigMap
 metadata:
   name: dcm4che-iid-config

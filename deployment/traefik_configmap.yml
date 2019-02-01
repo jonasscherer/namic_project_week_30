@@ -128,7 +128,7 @@ data:
     # Optional for in-cluster configuration, required otherwise.
     # Default: empty
     #
-    endpoint = "https://192.168.99.100:30005"
+    endpoint = "https://192.168.99.102:30005"
 
     # Bearer token used for the Kubernetes client configuration.
     #

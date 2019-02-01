@@ -54,7 +54,7 @@ spec:
           # - name: GELF_LEVEL
           #   value: INFO
           # - name: AUTH_SERVER_URL
-          #   value: https://192.168.99.100:8080/auth
+          #   value: https://192.168.99.102:8080/auth
           # - name: REALM_NAME
           #   value: jipdktk
           # - name: UI_CLIENT_ID
