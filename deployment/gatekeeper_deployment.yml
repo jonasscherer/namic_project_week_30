@@ -22,8 +22,7 @@ spec:
             containerPort: 8443
           volumeMounts:
             - name: gk-config-file
-              mountPath: /app/gatekeeper.cfg
-              subPath: gatekeeper.cfg
+              mountPath: /app
             - name: ssl-config
               mountPath: /ssl
       volumes:
@@ -33,7 +32,4 @@ spec:
       - name: gk-config-file
         configMap:
           name: gatekeeper-config
-          items:
-          - key: gatekeeper.cfg
-            path: gatekeeper.cfg
 ---
