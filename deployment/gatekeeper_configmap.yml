@@ -29,9 +29,9 @@ data:
     resources:
     - uri: /auth/*
       white-listed: true
-    - uri: /*
-      roles:
-        - admins
+    # - uri: /*
+    #   roles:
+    #     - admins
   access-denied.html: |-
     <!DOCTYPE html>
     <html lang="en" >
