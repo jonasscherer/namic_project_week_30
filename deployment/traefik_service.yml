@@ -13,14 +13,13 @@ spec:
       name: tr-admin-port
     - protocol: TCP
       port: 80
-      nodePort: 30001
       targetPort: traefik-http
       name: traefik-http-port
     - protocol: TCP
       port: 443
-      targetPort: traefik-http
+      targetPort: 443
       name: traefik-https-port
-  type: NodePort
+  type: ClusterIP
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress

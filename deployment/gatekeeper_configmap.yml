@@ -1,0 +1,34 @@
+---
+apiVersion: v1
+data:
+  gatekeeper.cfg: |-
+    client-secret: 217ae38f-0b31-4334-bb0f-0071e6da7a26 # require for access_type: confidential
+    discovery-url: http://192.168.99.100:30443/auth/realms/namic
+    openid-provider-proxy: https://keycloak-service.kube-system.svc.cluster.local:443
+    client-id: namic
+    skip-openid-provider-tls-verify: true
+    enabled-proxy-protocol: true
+    listen: 0.0.0.0:8443
+    listen-http: 0.0.0.0:8080
+    enable-https-redirection: true
+    enable-refresh-tokens: true
+    enable-security-filter: true
+    enable-metrics: true
+    enable-encrypted-token: false
+    encryption-key: A35EEB8E96F62E562F9966AD68D5B2FC
+    enable-authorization-header: false
+    enable-authorization-cookie: true
+    tls-cert: /ssl/tls.crt
+    tls-private-key: /ssl/tls.key
+    # no-redirects: true
+    enable-default-deny: true
+    skip-upstream-tls-verify: true
+    preserve-host: true
+    upstream-url: https://traefik-ingress-service.kube-system.svc.cluster.local:443
+    resources:
+    - uri: /auth/*
+      white-listed: true
+kind: ConfigMap
+metadata:
+  name: gatekeeper-config
+  namespace: kube-system

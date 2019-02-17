@@ -69,7 +69,7 @@ data:
     # Optional
     # Default: ["http"]
     #
-    defaultEntryPoints = ["http"]
+    defaultEntryPoints = ["http","https"]
 
     # Allow the use of 0 as server weight.
     # - false: a weight 0 means internally a weight of 1.
@@ -109,11 +109,12 @@ data:
     [entryPoints]
       [entryPoints.http]
       address = ":80"
-        # [entryPoints.http.redirect]
-        #   regex = "^http://(.*)"
-        #   replacement = "https://$1"
       [entryPoints.https]
       address = ":443"
+        [entryPoints.https.tls]
+          [[entryPoints.https.tls.certificates]]
+          certFile = "/ssl/tls.crt"
+          keyFile = "/ssl/tls.key"
 
 
     ################################################################
@@ -128,7 +129,7 @@ data:
     # Optional for in-cluster configuration, required otherwise.
     # Default: empty
     #
-    endpoint = "https://192.168.99.102:30005"
+    # endpoint = "https://192.168.99.102:30005"
 
     # Bearer token used for the Kubernetes client configuration.
     #
@@ -175,7 +176,7 @@ data:
     # Optional
     # Default: false
     #
-    disablePassHostHeaders = true
+    disablePassHostHeaders = false
 
     # Enable PassTLSCert Headers.
     #

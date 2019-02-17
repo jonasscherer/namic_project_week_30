@@ -82,17 +82,22 @@ spec:
         #- --accesslogsfile=/log/traefik.log
         - --configfile=/config/traefik.toml
         volumeMounts:
-          - mountPath: /config/traefik.toml
-            name: traefik-config-file
+          - name: traefik-config-file
+            mountPath: /config/traefik.toml
             subPath: traefik.toml
-          - mountPath: /log
-            name: traefiklog
+          - name: traefiklog
+            mountPath: /log
+          - name: ssl-config
+            mountPath: /ssl
         livenessProbe:
           tcpSocket:
             port: 80
           initialDelaySeconds: 15
           periodSeconds: 120
       volumes:
+      - name: ssl-config
+        secret:
+          secretName: tls-secret
       - name: traefiklog
         hostPath:
           path: /data_deployment/traefik

@@ -6,12 +6,11 @@ metadata:
   labels:
     app: ohif
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - name: ohif-port
     port: 80
     targetPort: 80
-    nodePort: 30888
     protocol: TCP
   selector:
     app: ohif
@@ -30,7 +29,7 @@ spec:
   - host: 
     http:
       paths:
-      - path: /
+      - path: /ohif
         backend:
           serviceName: ohif-service
           servicePort: 80

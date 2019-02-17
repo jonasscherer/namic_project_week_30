@@ -6,16 +6,15 @@ metadata:
   labels:
     app: keycloak
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - name: kc-http-port
-    port: 8080
-    targetPort: http
+    port: 80
+    targetPort: 8080
     protocol: TCP
   - name: kc-https-port
-    port: 8443
-    nodePort: 30033
-    targetPort: https
+    port: 443
+    targetPort: 8443
     protocol: TCP
   - name: kc-admin-port
     port: 9090
@@ -41,5 +40,5 @@ spec:
       - path: /auth
         backend:
           serviceName: keycloak-service
-          servicePort: kc-http-port
+          servicePort: kc-https-port
 ---

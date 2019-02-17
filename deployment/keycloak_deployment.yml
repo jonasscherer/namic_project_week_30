@@ -24,6 +24,7 @@ spec:
         - name: keycloak-container
           image: jboss/keycloak:4.8.3.Final
           imagePullPolicy: IfNotPresent
+          # args: ["-b","0.0.0.0","-c", "standalone-ha.xml", "-Dkeycloak.migration.action=export", "-Dkeycloak.migration.provider=dir","-Dkeycloak.migration.dir=/opt/jboss/keycloak/standalone/configuration/export" ]
           args: ["-b","0.0.0.0","-c", "standalone-ha.xml", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir","-Dkeycloak.migration.dir=/opt/jboss/keycloak/standalone/configuration/import","-Dkeycloak.migration.strategy=IGNORE_EXISTING"]
           env:
           - name: KEYCLOAK_USER
@@ -66,18 +67,24 @@ spec:
           - name: admin
             containerPort: 9990
           volumeMounts:
+            # - name: export
+            #   mountPath: /opt/jboss/keycloak/standalone/configuration/export
             - name: keycloak-import
               mountPath: /opt/jboss/keycloak/standalone/configuration/import
             - name: tls-config
               mountPath: "/etc/x509/https"
               readOnly: true
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 20
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 8080
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 20
       volumes:
+      # - name: export
+      #   hostPath:
+      #       path: /data_deployment/keycloak_export
+      #       type: DirectoryOrCreate
       - name: keycloak-import
         configMap:
           name: keycloak-config
