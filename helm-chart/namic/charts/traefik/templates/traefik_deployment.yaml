@@ -1,0 +1,110 @@
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: traefik-ingress-controller
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - endpoints
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: traefik-ingress-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: traefik-ingress-controller
+subjects:
+- kind: ServiceAccount
+  name: traefik-ingress-controller
+  namespace: kube-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: traefik-ingress-controller
+  namespace: kube-system
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: traefik-ingress-controller
+  namespace: kube-system
+  labels:
+    k8s-app: traefik-ingress-lb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: traefik-ingress-lb
+  template:
+    metadata:
+      labels:
+        k8s-app: traefik-ingress-lb
+        name: traefik-ingress-lb
+    spec:
+      serviceAccountName: traefik-ingress-controller
+      terminationGracePeriodSeconds: 60
+      containers:
+      - image: traefik:1.7-alpine
+        name: traefik-ingress-lb
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: traefik-http
+          containerPort: 80
+        - name: traefik-https
+          containerPort: 433
+        - name: traefik-admin
+          containerPort: 8080
+        args:
+        - --api
+        - --kubernetes
+        - --logLevel=INFO
+        - --metrics=true
+        - '--metrics.prometheus=true'        
+        #- --accesslogsfile=/log/traefik.log
+        - --configfile=/config/traefik.toml
+        volumeMounts:
+          - name: traefik-config-file
+            mountPath: /config/traefik.toml
+            subPath: traefik.toml
+          - name: traefiklog
+            mountPath: /log
+          - name: ssl-config
+            mountPath: /ssl
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 120
+      volumes:
+      - name: ssl-config
+        secret:
+          secretName: tls-secret
+      - name: traefiklog
+        hostPath:
+          path: /data_deployment/traefik
+          type: DirectoryOrCreate
+      - name: traefik-config-file
+        configMap:
+          name: traefik-config
+          items:
+          - key: traefik.toml
+            path: traefik.toml

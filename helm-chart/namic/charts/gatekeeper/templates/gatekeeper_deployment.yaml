@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: gatekeeper
+  namespace: kube-system
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gatekeeper
+    spec:
+      containers:
+        - name: gatekeeper-container
+          image: jonasscherer/gatekeeper
+          args: ["--config","/app/gatekeeper.cfg"]
+          imagePullPolicy: Always
+          ports:
+          - name: http
+            containerPort: 8080
+          - name: https
+            containerPort: 8443
+          volumeMounts:
+            - name: gk-config-file
+              mountPath: /app
+            - name: ssl-config
+              mountPath: /ssl
+      volumes:
+      - name: ssl-config
+        secret:
+          secretName: tls-secret
+      - name: gk-config-file
+        configMap:
+          name: gatekeeper-config
+---

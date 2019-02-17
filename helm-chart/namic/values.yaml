@@ -1,0 +1,5 @@
+global:
+  clusterIp: 192.168.99.100
+  httpNodePort: 30080
+  httpsNodePort: 30443
+  domain: minikube
